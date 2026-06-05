@@ -6,6 +6,11 @@ def retrieve(query, k=2):
 
     collection = get_collection()
 
+    print(
+        "QUERY COLLECTION COUNT:",
+        collection.count()
+    )
+
     query_embedding = get_embedding(
         query
     )

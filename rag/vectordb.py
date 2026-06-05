@@ -1,12 +1,18 @@
 import chromadb
+import streamlit as st
 
 from rag.embeddings import get_embedding
 
 
-client = chromadb.EphemeralClient()
+@st.cache_resource
+def get_client():
+
+    return chromadb.EphemeralClient()
 
 
 def get_collection():
+
+    client = get_client()
 
     return client.get_or_create_collection(
         name="documents"
@@ -14,6 +20,8 @@ def get_collection():
 
 
 def store_chunks(chunks):
+
+    client = get_client()
 
     try:
 
@@ -24,7 +32,9 @@ def store_chunks(chunks):
     except:
         pass
 
-    collection = get_collection()
+    collection = client.get_or_create_collection(
+        name="documents"
+    )
 
     for idx, chunk in enumerate(chunks):
 
@@ -35,3 +45,8 @@ def store_chunks(chunks):
             embeddings=[embedding],
             documents=[chunk]
         )
+
+    print(
+        "COLLECTION COUNT:",
+        collection.count()
+    )
