@@ -17,6 +17,14 @@ def router_node(state):
         state["question"]
     )
 
+    print(
+        f"QUESTION: {state['question']}"
+    )
+
+    print(
+        f"ROUTE: {route}"
+    )
+
     return {
         **state,
         "route": route
