@@ -17,9 +17,6 @@ def router_node(state):
         state["question"]
     )
 
-    if state.get("document_loaded"):
-        route = "rag"
-
     return {
         **state,
         "route": route

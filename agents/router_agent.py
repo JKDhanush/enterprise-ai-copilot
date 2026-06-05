@@ -11,44 +11,36 @@ def route_question(question):
             "content": """
 You are a routing agent.
 
-Classify the user query into ONE category:
+Classify the user query into exactly ONE category.
 
 sql
 rag
-voice
-
-Rules:
+general
 
 sql:
-- sales
 - revenue
-- customers
+- sales
 - products
+- customers
 - analytics
-- database questions
+- database
 
 rag:
 - uploaded documents
 - resumes
-- PDFs
 - candidate evaluation
 - skills
-- projects
 - experience
-- summaries
+- projects
+- document summaries
 
-voice:
-- call recordings
-- transcripts
-- sentiment
-- action items
-- customer support calls
+general:
+- everything else
 
 Return ONLY one word:
-
 sql
 rag
-voice
+general
 """
         },
         {
@@ -62,4 +54,13 @@ voice
         provider="groq"
     )
 
-    return route.strip().lower()
+    route = route.strip().lower()
+
+    if route not in [
+        "sql",
+        "rag",
+        "general"
+    ]:
+        route = "general"
+
+    return route
