@@ -12,20 +12,21 @@ collection = client.get_or_create_collection(
 )
 
 
-def clear_collection():
-
-    existing = collection.get()
-
-    if existing["ids"]:
-
-        collection.delete(
-            ids=existing["ids"]
-        )
-
-
 def store_chunks(chunks):
 
-    clear_collection()
+    try:
+
+        existing = collection.get()
+
+        if existing["ids"]:
+
+            collection.delete(
+                ids=existing["ids"]
+            )
+
+    except Exception:
+
+        pass
 
     for idx, chunk in enumerate(chunks):
 
