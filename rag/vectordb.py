@@ -3,9 +3,7 @@ import chromadb
 from rag.embeddings import get_embedding
 
 
-client = chromadb.PersistentClient(
-    path="data/chroma"
-)
+client = chromadb.Client()
 
 collection = client.get_or_create_collection(
     name="documents"
@@ -24,15 +22,14 @@ def store_chunks(chunks):
                 ids=existing["ids"]
             )
 
-    except Exception:
-
+    except:
         pass
 
     for idx, chunk in enumerate(chunks):
 
         embedding = get_embedding(chunk)
 
-        collection.add(
+        collection.upsert(
             ids=[str(idx)],
             embeddings=[embedding],
             documents=[chunk]
