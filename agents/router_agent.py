@@ -5,57 +5,61 @@ llm = LLMService()
 
 def route_question(question):
 
-    question = question.lower()
+    messages = [
+        {
+            "role": "system",
+            "content": """
+You are a routing agent.
 
-    # -------------------
-    # SQL ROUTING
-    # -------------------
+Classify the user query into ONE category:
 
-    sql_keywords = [
-        "revenue",
-        "sales",
-        "customer",
-        "customers",
-        "product",
-        "products",
-        "trend",
-        "analytics",
-        "top",
-        "highest",
-        "lowest",
-        "database"
+sql
+rag
+voice
+
+Rules:
+
+sql:
+- sales
+- revenue
+- customers
+- products
+- analytics
+- database questions
+
+rag:
+- uploaded documents
+- resumes
+- PDFs
+- candidate evaluation
+- skills
+- projects
+- experience
+- summaries
+
+voice:
+- call recordings
+- transcripts
+- sentiment
+- action items
+- customer support calls
+
+Return ONLY one word:
+
+sql
+rag
+voice
+"""
+        },
+        {
+            "role": "user",
+            "content": question
+        }
     ]
 
-    if any(
-        keyword in question
-        for keyword in sql_keywords
-    ):
-        return "sql"
+    route = llm.generate(
+        messages,
+        provider="groq"
+    )
 
-    # -------------------
-    # RAG ROUTING
-    # -------------------
-
-    rag_keywords = [
-        "resume",
-        "cv",
-        "document",
-        "pdf",
-        "experience",
-        "skills",
-        "project",
-        "projects",
-        "internship"
-    ]
-
-    if any(
-        keyword in question
-        for keyword in rag_keywords
-    ):
-        return "rag"
-
-    # -------------------
-    # GENERAL
-    # -------------------
-
-    return "general"
+    return route.strip().lower()
