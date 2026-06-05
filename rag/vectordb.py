@@ -5,27 +5,26 @@ from rag.embeddings import get_embedding
 
 client = chromadb.EphemeralClient()
 
-collection = client.get_or_create_collection(
-    name="documents"
-)
+
+def get_collection():
+
+    return client.get_or_create_collection(
+        name="documents"
+    )
 
 
 def store_chunks(chunks):
 
-    global collection
-
     try:
 
         client.delete_collection(
-            "documents"
+            name="documents"
         )
 
     except:
         pass
 
-    collection = client.get_or_create_collection(
-        name="documents"
-    )
+    collection = get_collection()
 
     for idx, chunk in enumerate(chunks):
 

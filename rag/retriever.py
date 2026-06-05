@@ -1,10 +1,14 @@
 from rag.embeddings import get_embedding
-from rag.vectordb import collection
+from rag.vectordb import get_collection
 
 
 def retrieve(query, k=2):
 
-    query_embedding = get_embedding(query)
+    collection = get_collection()
+
+    query_embedding = get_embedding(
+        query
+    )
 
     results = collection.query(
         query_embeddings=[query_embedding],
